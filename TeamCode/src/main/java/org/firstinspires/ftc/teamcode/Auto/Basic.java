@@ -13,6 +13,7 @@ import org.firstinspires.ftc.teamcode.util.hardware.AutoTransitioner;
 import org.firstinspires.ftc.teamcode.util.hardware.HardAuto;
 
 @Autonomous(name = "Basic", group = "Dev")
+@SuppressWarnings(value="unused")
 //@Disabled
 public class Basic extends LinearOpMode {
 	
@@ -24,15 +25,15 @@ public class Basic extends LinearOpMode {
 	IMUPos imuPos;
 	
 	@Override
-	public void runOpMode() throws InterruptedException {
+	public void runOpMode() {
 		{
-			AutoTransitioner.transitionOnStop(this, "TeleOp_Basic");
+			//AutoTransitioner.transitionOnStop(this, "TeleOp_Basic");
 			r.initRobot(this);
 			r.initAuto();
 			
-//			camera = new Camera(this);
-//			camera.openCamera();
-//			camera.startCamera();
+			camera = new Camera(this);
+			camera.openCamera();
+			camera.startCamera();
 			
 			fileManager = new FileManager(this);
 			fileManager.init("Auto");
@@ -45,13 +46,21 @@ public class Basic extends LinearOpMode {
 			waitForStart();
 			time.startTime();
 			
-//			camera.takePhoto();
+			camera.takePhoto(fileManager.getName());
 			
 			r.waiter(1000);
 			
-//			camera.stopCamera();
+			camera.stopCamera();
+			
+			while(!isStopRequested()){
+				idle();
+			}
+			
+			fileManager.close();
 			
 			r.setDriveMotorMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+			
+			fileManager.close();
 		}
 		/*==========================================
 					Edit from here down!
@@ -63,8 +72,6 @@ public class Basic extends LinearOpMode {
 //		r.backRight.setPower(1);
 //		r.waiter(3000);
 //		r.setToStill();
-
-
 		
 		// DO NOT EDIT
 		//org.firstinspires.ftc.teamcode.util.Threads.File.fileManager.close();

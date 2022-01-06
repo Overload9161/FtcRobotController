@@ -68,11 +68,13 @@ public class Camera {
 	 * if you're curious): no knowledge of multi-threading is needed here. */
 	private Handler callbackHandler;
 	
+	private String name;
+	
 	public Camera(OpMode opMode){
 		this.opMode = opMode;
 		this.telemetry = opMode.telemetry;
 		
-		captureDirectory = new File(opMode.hardwareMap.appContext.getCacheDir() +"/Camera");
+		captureDirectory = new File(opMode.hardwareMap.appContext.getCacheDir() +"/Logs/Camera");
 		
 		callbackHandler = CallbackLooper.getDefault().getHandler();
 		
@@ -83,7 +85,8 @@ public class Camera {
 		AppUtil.getInstance().ensureDirectoryExists(captureDirectory);
 	}
 	
-	public void takePhoto(){
+	public void takePhoto(String name){
+		this.name = name;
 		Bitmap bmp = frameQueue.poll();
 		if (bmp != null) {
 			onNewFrame(bmp);
@@ -226,7 +229,7 @@ public class Camera {
 	}
 	
 	private void saveBitmap(Bitmap bitmap) {
-		File file = new File(captureDirectory, "Camera-"+ Objects.requireNonNull(captureDirectory.listFiles()).length+".jpg");
+		File file = new File(captureDirectory, "Camera-"+name+".jpg");
 		try {
 			try (FileOutputStream outputStream = new FileOutputStream(file)) {
 				bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);

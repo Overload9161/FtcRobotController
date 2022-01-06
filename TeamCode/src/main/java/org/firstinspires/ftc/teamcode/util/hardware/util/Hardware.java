@@ -98,10 +98,10 @@ public class Hardware extends Application {
 
 			// Do not edit this
 			driveMotors = motors.getJSONObject("Drive");
-			frontLeft   = hwMap.get(DcMotorEx.class, String.valueOf(driveMotors.getJSONObject("Front Left Motor").get("name")));
-			frontRight  = hwMap.get(DcMotorEx.class, String.valueOf(driveMotors.getJSONObject("Front Right Motor").get("name")));
-			backLeft    = hwMap.get(DcMotorEx.class, String.valueOf(driveMotors.getJSONObject("Back Left Motor").get("name")));
-			backRight   = hwMap.get(DcMotorEx.class, String.valueOf(driveMotors.getJSONObject("Back Right Motor").get("name")));
+			frontLeft   = hwMap.get(DcMotorEx.class, String.valueOf(driveMotors.getJSONObject("Front Left Motor").get("Name")));
+			frontRight  = hwMap.get(DcMotorEx.class, String.valueOf(driveMotors.getJSONObject("Front Right Motor").get("Name")));
+			backLeft    = hwMap.get(DcMotorEx.class, String.valueOf(driveMotors.getJSONObject("Back Left Motor").get("Name")));
+			backRight   = hwMap.get(DcMotorEx.class, String.valueOf(driveMotors.getJSONObject("Back Right Motor").get("Name")));
 			drive 		= new DcMotorEx[]{frontLeft, frontRight, backLeft, backRight};
 
 			{
@@ -140,18 +140,18 @@ public class Hardware extends Application {
 					backRight.setDirection(DcMotorSimple.Direction.REVERSE);
 			}
 
-			lift = hwMap.get(DcMotorEx.class, String.valueOf(motors.getJSONObject("Lift").get("name")));
-			inout = hwMap.get(DcMotorEx.class, String.valueOf(motors.getJSONObject("In_Out").get("name")));
-
-			if((Boolean) motors.getJSONObject("Lift").get("Reverse"))
-				lift.setDirection(DcMotorSimple.Direction.REVERSE);
-			if((Boolean) motors.getJSONObject("In_Out").get("Reverse"))
-				inout.setDirection(DcMotorSimple.Direction.REVERSE);
-
-			if(String.valueOf(motors.getJSONObject("Lift").get("BrakeType")).equals("brake"))
-				lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-			if(String.valueOf(motors.getJSONObject("In_Out").get("BrakeType")).equals("brake"))
-				inout.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//			lift = hwMap.get(DcMotorEx.class, String.valueOf(motors.getJSONObject("Lift").get("name")));
+//			inout = hwMap.get(DcMotorEx.class, String.valueOf(motors.getJSONObject("In_Out").get("name")));
+//
+//			if((Boolean) motors.getJSONObject("Lift").get("Reverse"))
+//				lift.setDirection(DcMotorSimple.Direction.REVERSE);
+//			if((Boolean) motors.getJSONObject("In_Out").get("Reverse"))
+//				inout.setDirection(DcMotorSimple.Direction.REVERSE);
+//
+//			if(String.valueOf(motors.getJSONObject("Lift").get("BrakeType")).equals("brake"))
+//				lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//			if(String.valueOf(motors.getJSONObject("In_Out").get("BrakeType")).equals("brake"))
+//				inout.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
 			// Add your own
 
@@ -159,7 +159,8 @@ public class Hardware extends Application {
 
 			//servo = new Servo[]{S1};
 
-			allMotors = new DcMotorEx[]{frontLeft, frontRight, backLeft, backRight, lift, inout};
+//			allMotors = new DcMotorEx[]{frontLeft, frontRight, backLeft, backRight, lift, inout};
+			allMotors = new DcMotorEx[]{frontLeft, frontRight, backLeft, backRight};
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}

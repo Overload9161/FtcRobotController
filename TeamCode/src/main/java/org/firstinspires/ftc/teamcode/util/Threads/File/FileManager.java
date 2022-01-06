@@ -35,6 +35,8 @@ public class FileManager {
 	
 	List<LynxModule> allHubs;
 	
+	private String name;
+	
 	/**
 	 * Init the file manager
 	 */
@@ -48,15 +50,11 @@ public class FileManager {
 	 */
 	public void init(String Type){
 		try {
-//			directory = new File("/SD Card"+"/"+Type+"/");
-//			if(!directory.exists())
-//				directory.mkdir s()0;
-//			directory = new File("/SD Card"+"/"+Type+"/");
-//			directory.mkdirs();
-			directory = new File(op.hardwareMap.appContext.getCacheDir()+"/"+Type);
+			directory = new File(op.hardwareMap.appContext.getCacheDir()+"/Logs/"+Type);
 			if(!directory.exists())
 				directory.mkdirs();
-			file = new File(directory, "Log"+Type+Objects.requireNonNull(directory.listFiles()).length+".txt");
+			name = "Log"+Type+Objects.requireNonNull(directory.listFiles()).length;
+			file = new File(directory, name+".txt");
 			fos = new FileOutputStream(file);
 			Log.d("File Location", file.getAbsolutePath());
 			Log.d("File", "Working");
@@ -80,6 +78,10 @@ public class FileManager {
 	public void StartTeleOp(ElapsedTime time){
 		this.time = time;
 		timer.schedule(new calling(time, this), 0, 25);
+	}
+	
+	public String getName(){
+		return this.name;
 	}
 	
 	/**
@@ -238,8 +240,12 @@ public class FileManager {
 		return this;
 	}
 	
-	Executable sample = null;
+//	Executable[] sample;
 	
+//	ArrayList<Executable> sample;
+	
+	
+	Executable sample;
 	/**
 	 * Set the code that you want to run
 	 * @param code {@link Executable}

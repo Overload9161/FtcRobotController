@@ -135,9 +135,11 @@ public class IMUPos extends Thread {
 				angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
 //			gravity = imu.getGravity();
 				fileManager.writeFile("GA", new double[]{imu.getAcceleration().xAccel, imu.getAcceleration().yAccel, imu.getAcceleration().zAccel}, time)
-						.writeFile("Lin", new double[]{imu.getLinearAcceleration().xAccel, imu.getLinearAcceleration().yAccel, imu.getLinearAcceleration().zAccel}, time)
+						.writeFile("Lin", 	new double[]{imu.getLinearAcceleration().xAccel, imu.getLinearAcceleration().yAccel, imu.getLinearAcceleration().zAccel}, time)
 						.writeFile("Angle", new double[]{angles.firstAngle, angles.secondAngle, angles.thirdAngle}, time);
 			};
+			
+			fileManager.setExecutable(ex);
 		}
 		
 		while(!this.isInterrupted()){

@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.util.Threads.File.FileManager;
 import org.firstinspires.ftc.teamcode.util.Threads.position.IMU.IMUPos;
+import org.firstinspires.ftc.teamcode.util.filters.PID.PIDFilter;
 import org.firstinspires.ftc.teamcode.util.hardware.HardTele;
 
 @TeleOp(name = "TeleOp_Basic", group = "TeleOp")
@@ -16,7 +17,7 @@ public class TeleOp_Basic extends OpMode {
 	boolean bWasPressed = false;
 	
 	HardTele r = new HardTele();
-	FileManager fileManager = new FileManager(this);
+	FileManager fileManager;
 	IMUPos imuPos;
 	//LEDController ledController = new LEDController(this);
 	
@@ -27,6 +28,7 @@ public class TeleOp_Basic extends OpMode {
 		//ledController.setState(state.INIT);
 		time.startTime();
 		r.initRobot(this);
+		fileManager = new FileManager(this);
 		fileManager.init("TeleOp");
 		fileManager.initMotors(r.allMotors);
 		fileManager.StartTeleOp(time);
