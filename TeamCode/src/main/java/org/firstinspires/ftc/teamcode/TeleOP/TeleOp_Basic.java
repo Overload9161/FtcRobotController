@@ -6,10 +6,10 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.util.Threads.File.FileManager;
 import org.firstinspires.ftc.teamcode.util.Threads.position.IMU.IMUPos;
-import org.firstinspires.ftc.teamcode.util.filters.PID.PIDFilter;
 import org.firstinspires.ftc.teamcode.util.hardware.HardTele;
 
 @TeleOp(name = "TeleOp_Basic", group = "TeleOp")
+@SuppressWarnings(value="unused")
 //@Disabled
 public class TeleOp_Basic extends OpMode {
 	
@@ -22,6 +22,7 @@ public class TeleOp_Basic extends OpMode {
 	//LEDController ledController = new LEDController(this);
 	
 	ElapsedTime time = new ElapsedTime();
+	private final ElapsedTime runTime = new ElapsedTime();
 	
 	@Override
 	public void init() {
@@ -30,11 +31,11 @@ public class TeleOp_Basic extends OpMode {
 		r.initRobot(this);
 		fileManager = new FileManager(this);
 		fileManager.init("TeleOp");
-		fileManager.initMotors(r.allMotors);
+		fileManager.initMotors(r.drive);
 		fileManager.StartTeleOp(time);
 		
-		imuPos = new IMUPos(this, new int[] {0,0}, time);
-		imuPos.initFile(this.fileManager);
+//		imuPos = new IMUPos(this, new int[] {0,0}, time);
+//		imuPos.initFile(this.fileManager);
 		
 		//ledController.setState(state.WAIT);
 	}
@@ -48,6 +49,7 @@ public class TeleOp_Basic extends OpMode {
 	
 	@Override
 	public void loop() {
+		runTime.reset();
 		{
 			double deflator;
 			
@@ -113,6 +115,8 @@ public class TeleOp_Basic extends OpMode {
 		}
 
 		r.lift.setPower(-gamepad1.right_stick_y * 0.7);
+		
+		r.spin.setPower(gamepad1.right_trigger * 0.7);
 
 		if(gamepad1.dpad_up)
 			r.inout.setPower(-0.6);
@@ -120,6 +124,8 @@ public class TeleOp_Basic extends OpMode {
 			r.inout.setPower(0.6);
 		else r.inout.setPower(0);
 		
+		// This is meant to determine how long this takes to run
+		fileManager.writeFile("RunTime", runTime.milliseconds(), time.milliseconds());
 	}
 	
 	@Override

@@ -36,7 +36,7 @@ public class HardAuto extends Hardware{
 		parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
 		parameters.accelUnit           = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
 		parameters.calibrationDataFile = "BNO055IMUCalibration.json"; // see the calibration sample opmode
-		parameters.loggingEnabled      = true;
+		parameters.loggingEnabled      = false;
 		parameters.loggingTag          = "IMU";
 		parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
 		

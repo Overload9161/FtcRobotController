@@ -31,17 +31,17 @@ public class Hardware extends Application {
 
 	private final ElapsedTime Timer = new ElapsedTime();
 	public ElapsedTime time = new ElapsedTime();
-
+	
+	// Drive motors - DO NOT CHANGE
 	public DcMotorEx frontLeft;
 	public DcMotorEx frontRight;
 	public DcMotorEx backLeft;
 	public DcMotorEx backRight;
-
-	public DcMotorEx lift, inout;
-
-	public DcMotor spin;
-
+	/** All Drive Motors */
 	public DcMotorEx[] drive;
+	
+	// Peripherals
+	public DcMotorEx lift, inout, spin;
 	
 	/** This is all of our motors in an array for ease of use */
 	public DcMotorEx[] allMotors;
@@ -50,9 +50,15 @@ public class Hardware extends Application {
 
 	public Servo S1;
 
-	Servo[] servo;
+	public Servo[] servo;
 
-	JSONObject jsonObject, hardware, motors, driveMotors;
+	JSONObject jsonObject,
+			   hardware,
+			   motors,
+			   driveMotors,
+			   peripherals,
+			   sensors,
+			   servos;
 
 	/**
 	 * Use this to initiate the robot
@@ -94,7 +100,10 @@ public class Hardware extends Application {
 		try {
 			// Do not edit this
 			hardware = jsonObject.getJSONObject("Hardware");
-			motors = hardware.getJSONObject("DcMotors");
+			motors 	 = hardware.getJSONObject("DcMotors");
+			peripherals = motors.getJSONObject("Peripherals");
+			sensors  = hardware.getJSONObject("Sensors");
+			servos   = hardware.getJSONObject("Servos");
 
 			// Do not edit this
 			driveMotors = motors.getJSONObject("Drive");
@@ -139,19 +148,28 @@ public class Hardware extends Application {
 				if ((Boolean) driveMotors.getJSONObject("Back Right Motor").get("Reverse"))
 					backRight.setDirection(DcMotorSimple.Direction.REVERSE);
 			}
-
-//			lift = hwMap.get(DcMotorEx.class, String.valueOf(motors.getJSONObject("Lift").get("name")));
-//			inout = hwMap.get(DcMotorEx.class, String.valueOf(motors.getJSONObject("In_Out").get("name")));
-//
-//			if((Boolean) motors.getJSONObject("Lift").get("Reverse"))
-//				lift.setDirection(DcMotorSimple.Direction.REVERSE);
-//			if((Boolean) motors.getJSONObject("In_Out").get("Reverse"))
-//				inout.setDirection(DcMotorSimple.Direction.REVERSE);
-//
-//			if(String.valueOf(motors.getJSONObject("Lift").get("BrakeType")).equals("brake"))
-//				lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-//			if(String.valueOf(motors.getJSONObject("In_Out").get("BrakeType")).equals("brake"))
-//				inout.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+			try {
+				lift = hwMap.get(DcMotorEx.class, String.valueOf(peripherals.getJSONObject("Lift").get("Name")));
+				inout = hwMap.get(DcMotorEx.class, String.valueOf(peripherals.getJSONObject("InOut").get("Name")));
+				spin = hwMap.get(DcMotorEx.class, String.valueOf(peripherals.getJSONObject("Spinner").get("Name")));
+				
+				if ((Boolean) peripherals.getJSONObject("Lift").get("Reverse"))
+					lift.setDirection(DcMotorSimple.Direction.REVERSE);
+				if ((Boolean) peripherals.getJSONObject("InOut").get("Reverse"))
+					inout.setDirection(DcMotorSimple.Direction.REVERSE);
+				if((Boolean) peripherals.getJSONObject("Spinner").get("Reverse"))
+					spin.setDirection(DcMotorSimple.Direction.REVERSE);
+				
+				if (String.valueOf(peripherals.getJSONObject("Lift").get("BrakeType")).equals("brake"))
+					lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+				if (String.valueOf(peripherals.getJSONObject("InOut").get("BrakeType")).equals("brake"))
+					inout.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+				if(String.valueOf(peripherals.getJSONObject("Spinner").get("brake")).equals("brake"))
+					spin.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+			} catch (IllegalArgumentException e){
+				Log.d("Tried", "We tried");
+				Log.d("Tried", String.valueOf(e));
+			}
 
 			// Add your own
 
@@ -159,8 +177,7 @@ public class Hardware extends Application {
 
 			//servo = new Servo[]{S1};
 
-//			allMotors = new DcMotorEx[]{frontLeft, frontRight, backLeft, backRight, lift, inout};
-			allMotors = new DcMotorEx[]{frontLeft, frontRight, backLeft, backRight};
+			allMotors = new DcMotorEx[]{frontLeft, frontRight, backLeft, backRight, lift, inout};
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}

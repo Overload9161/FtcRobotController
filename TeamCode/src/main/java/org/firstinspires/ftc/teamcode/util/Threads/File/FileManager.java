@@ -37,6 +37,8 @@ public class FileManager {
 	
 	private String name;
 	
+	List<Executable> executables = new ArrayList<>();
+	
 	/**
 	 * Init the file manager
 	 */
@@ -68,7 +70,8 @@ public class FileManager {
 		for (LynxModule module : allHubs) {
 			module.setBulkCachingMode(LynxModule.BulkCachingMode.AUTO);
 		}
-		
+		executables.add(gamepadLog);
+		executables.add(motorsLog);
 	}
 	
 	/**
@@ -77,7 +80,7 @@ public class FileManager {
 	 */
 	public void StartTeleOp(ElapsedTime time){
 		this.time = time;
-		timer.schedule(new calling(time, this), 0, 25);
+		timer.schedule(new calling(time, this), 0, 1);
 	}
 	
 	public String getName(){
@@ -119,11 +122,7 @@ public class FileManager {
 		buffer.clear();
 	}
 	
-	/**
-	 * Log all of the data from the gamepads to the buffer
-	 * @param time When you are logging this
-	 */
-	public void writeGamepad(double time){
+	Executable gamepadLog = (time) -> {
 		// Gamepad 1
 		if(op.gamepad1.getGamepadId() > 0) {
 			// Sticks
@@ -162,7 +161,15 @@ public class FileManager {
 			if(voltage > 0)
 				writeFile("Voltage", voltage, time);
 		}
-	}
+	};
+	
+	Executable motorsLog = (time) -> {
+		if(motor != null){
+			for(DcMotor dcMotor : motor){
+				writeFile(String.valueOf(op.hardwareMap.getNamesOf(dcMotor)), new double[]{dcMotor.getPower(), dcMotor.getTargetPosition(), dcMotor.getCurrentPosition()}, time);
+			}
+		}
+	};
 	
 	/**
 	 * White data from the motors to the buffer
@@ -251,12 +258,13 @@ public class FileManager {
 	 * @param code {@link Executable}
 	 */
 	public void setExecutable(Executable code){
-		sample = code;
+		executables.add(code);
 	}
 	
 	void customRun(double time){
-		if(sample != null)
-			sample.run(time);
+		for(Executable executable : executables){
+			executable.run(time);
+		}
 	}
 	
 }
@@ -272,8 +280,8 @@ class calling extends TimerTask{
 	
 	public void run(){
 		double t = time.milliseconds();
-		f.writeGamepad(t);
-		f.writeMotors(t);
+//		f.writeGamepad(t);
+//		f.writeMotors(t);
 		f.customRun(t);
 		f.writeToFile();
 	}

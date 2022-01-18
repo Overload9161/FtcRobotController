@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.util.Threads.position.IMU;
 import android.util.Log;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -80,19 +81,20 @@ public class IMUPos extends Thread {
 		parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
 		parameters.accelUnit           = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
 		parameters.calibrationDataFile = "BNO055IMUCalibration.json"; // see the calibration sample opmode
-		parameters.loggingEnabled      = true;
+		parameters.loggingEnabled      = false;
 		parameters.loggingTag          = "IMU";
 		parameters.accelerationIntegrationAlgorithm = new Accel();
+//		parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
 		
 		imu = opMode.hardwareMap.get(BNO055IMU.class, "imu");
 		imu.initialize(parameters);
 		
 		position.x = 0;
 		position.y = 0;
-		
+
 		velocity.xVeloc = 0;
 		velocity.yVeloc = 0;
-		
+
 		// Start the logging of measured acceleration
 		imu.startAccelerationIntegration(position, velocity, 50);
 		
